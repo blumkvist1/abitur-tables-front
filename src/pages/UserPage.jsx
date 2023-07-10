@@ -251,6 +251,7 @@ const UserPage = () => {
         bordered
         pagination={false}
         size="small"
+		  style={{ margin: 10,  }}
         scroll={{
           x: 1200,
           //y: 285,

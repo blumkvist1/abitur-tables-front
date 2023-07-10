@@ -17,7 +17,9 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <MainTable />,
+        element: <AbiturList />,
+
+        //element: <MainTable />,
       },
       {
         path: "/program/:name",

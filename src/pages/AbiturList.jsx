@@ -6,21 +6,27 @@ import { Link, useParams } from "react-router-dom";
 const data = [
 	{
 	  key: "1",
-	  name: "165-938-468 00",
-	  age: 32,
-	  address: "New York No. 1 Lake Park",
+	  snils: "165-938-468 00",
+	  name: "20.03.01 Техносферная безопасность",
+	  profile: "Информационные системы управления бизнес-процессами",
 	},
 	{
 	  key: "2",
-	  name: "157-436-346 83",
+	  snils: "157-436-346 83",
 	  age: 42,
+	  profile: "Технологии разработки программного обеспечения",
+	  name: "20.03.01 Техносферная безопасность",
+
 	  address: "London No. 1 Lake Park",
 	},
 	{
 	  key: "3",
-	  name: "160-687-671 93",
+	  snils: "160-687-671 93",
 	  age: 32,
 	  address: "Sydney No. 1 Lake Park",
+	  name: "15.03.06 Мехатроника и робототехника",
+	  profile: "Технологии разработки программного обеспечения",
+
 	},
  ];
 
@@ -147,12 +153,32 @@ const AbiturList = () => {
       rowScope: "row",
       width: "5%",
     },
-    {
-      title: "СНИЛС",
+	 {
+      title: "Наименование направления",
       dataIndex: "name",
       key: "name",
-      width: "20%",
+      width: "auto",
       ...getColumnSearchProps("name"),
+      render: (text) => (
+        <Link to={`/program/${text.replaceAll(" ", "_")}`}>{text}</Link>
+      ),
+    },
+	 {
+      title: "Наименование профиля",
+      dataIndex: "profile",
+      key: "profile",
+      width: "auto",
+      ...getColumnSearchProps("profile"),
+      render: (text) => (
+        <Link to={`/program/${text.replaceAll(" ", "_")}`}>{text}</Link>
+      ),
+    },
+    {
+      title: "СНИЛС",
+      dataIndex: "snils",
+      key: "snils",
+      width: "20%",
+      ...getColumnSearchProps("snils"),
       render: (text) => <Link to={`/abiturient/${text}`}>{text}</Link>,
     },
     {
@@ -222,17 +248,18 @@ const AbiturList = () => {
       <h1 style={{ marginLeft: 10, marginTop: 10, fontSize: 30 }}>
         Cводка приема заявлений абитуриентов в 2023 году
       </h1>
-      <h1 style={{ marginLeft: 10, marginTop: 10, fontSize: 25 }}>
+      {/* <h1 style={{ marginLeft: 10, marginTop: 10, fontSize: 25 }}>
         {name.replaceAll("_", " ")}
       </h1>
       <h1 style={{ marginLeft: 10, marginTop: 10, fontSize: 25 }}>
         {nameProf.replaceAll("_", " ")}
-      </h1>
+      </h1> */}
       <Table
         columns={columns}
         dataSource={data}
         bordered
         size="small"
+		  style={{margin:10}}
         scroll={{
           x: 1200,
           //y: 285,

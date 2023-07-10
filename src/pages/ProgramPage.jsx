@@ -235,6 +235,7 @@ const ProgramPage = () => {
         dataSource={data}
         bordered
         pagination={false}
+		  style={{margin:10, marginBottom:10}}
         size="small"
         scroll={{
           x: 1200,
