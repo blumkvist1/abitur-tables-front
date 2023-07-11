@@ -15,7 +15,6 @@ import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import {
   fetchAllDirections,
-  fetchAllProfiles,
   fetchAllData,
 } from "./http/statementApi";
 import { Link } from "react-router-dom";
@@ -39,6 +38,22 @@ const data = [
     sumBall_ID: 253,
     soglasie: "Нет",
   },
+  {
+	sumBall: 243,
+	napravlenie: "Информатика и вычислительная техника",
+	levelTraining: "Бакалавриат",
+	foundationReceipts: "Бюджетная основа",
+	admissionCategory: "Имеющие особое право",
+	naprav_Group: "09.03.01_О_Б_ОП_Информатика и вычислительная техника",
+	profil: "Информационные системы управления бизнес-процессами",
+	prioritet: 1,
+	typeIsp: "Собственные",
+	haveDiplomInVus: "Да",
+	idEnrolle: 145290,
+	snils: "169-969-534 63",
+	sumBall_ID: 253,
+	soglasie: "Нет",
+ },
 ];
 
 const App = () => {
@@ -47,13 +62,11 @@ const App = () => {
   } = theme.useToken();
 
   const [directions, setDirections] = useState([]);
-  const [profiles, setProfiles] = useState([]);
   const [tablesData, setTablesData] = useState([]);
 
   const [formStudy, setFormStudy] = useState("Бакалавриат");
   const [levelTraining, setLevelTraining] = useState("Очная");
   const [direction, setDirection] = useState(null);
-  const [profile, setProfile] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -74,7 +87,7 @@ const App = () => {
 
   useEffect(() => {
     //setLoading(true);
-    fetchAllData(levelTraining, formStudy, direction, profile)
+    fetchAllData(levelTraining, formStudy, direction)
       .then((data) => {
         setTablesData(data);
         setLoading(false);
@@ -84,46 +97,17 @@ const App = () => {
           "Извините, что-то пошло не так, мы уже занимаемся этим вопросом"
         )
       );
-  }, [formStudy, levelTraining, direction, profile]);
+  }, [formStudy, levelTraining, direction]);
 
-  const getProfiles = (value) => {
-    //  setDirection(value);
-    //  fetchAllProfiles(levelTraining, formStudy, direction)
-    //    .then((data) => {
-    //      setProfiles(data);
-    //    })
-    // 	.catch((err) =>
-    // 	message.error(
-    // 	  "Извините, что-то пошло не так, мы уже занимаемся этим вопросом"
-    // 	)
-    //  );
-  };
 
-  //   const getEnrolleStatements = (snils) => {
-  // 	fetchAllDataForEnrolle(snils)
-  // 	.then((data) => {
 
-  // 	 })
-  // 	 .catch((err) =>
-  // 	 message.error(
-  // 		"Извините, что-то пошло не так, мы уже занимаемся этим вопросом"
-  // 	 ))
-  //   }
-  let listProfiles = [];
   let listDirections = [];
 
   const createListDirections = (directions) => {
-    listDirections = directions.map((dir) => ({ value: dir, label: dir }));
+    listDirections = directions?.map((dir) => ({key: dir, value: dir, label: dir }));
   };
   createListDirections(directions);
 
-  const createListProfiles = (profiles) => {
-    listProfiles = profiles.map((profiles) => ({
-      value: profiles,
-      label: profiles,
-    }));
-  };
-  createListProfiles(profiles);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -238,21 +222,13 @@ const App = () => {
   });
 
   const columns = [
-    {
-      title: "Наименование направления",
-      dataIndex: "napravlenie",
-      key: "napravlenie",
-      width: "auto",
-      ...getColumnSearchProps("napravlenie"),
+	{
+      title: "№",
+      dataIndex: "key",
+      rowScope: "row",
+      width: "5%",
     },
-    {
-      title: "Наименование профиля",
-      dataIndex: "profil",
-      key: "profil",
-      width: "auto",
-      ...getColumnSearchProps("profil"),
-    },
-    {
+	 {
       title: "СНИЛС",
       dataIndex: "snils",
       key: "snils",
@@ -268,27 +244,49 @@ const App = () => {
         </Link>
       ),
     },
-
-    {
+	 {
       title: "Приоритет",
       dataIndex: "prioritet",
       key: "prioritet",
       width: "5%",
     },
-    {
-      title: "Сумма баллов",
+	 {
+      title: "Сумма баллов с ИД",
+      dataIndex: "sumBall_ID",
+      key: "sumBall_ID",
+      width: "8%",
+    },
+	 {
+      title: "Сумма баллов по предметам",
+      dataIndex: "sumBall",
+      key: "sumBall",
+      width: "5%",
+    },
+	 {
+      title: "ПМ/М",
       dataIndex: "sumBall_ID",
       key: "sumBall_ID",
       width: "5%",
     },
-    {
-      title: "Тип испытаний",
-      dataIndex: "typeIsp",
-      key: "typeIsp",
-      width: "auto",
+	 {
+      title: "ФИЗ/ИНФ",
+      dataIndex: "sumBall_ID",
+      key: "sumBall_ID",
+      width: "5%",
     },
-
-    {
+	 {
+      title: "Русский язык",
+      dataIndex: "sumBall_ID",
+      key: "sumBall_ID",
+      width: "5%",
+    },
+	 {
+      title: "Индивидуальные достижения",
+      dataIndex: "sumBall_ID",
+      key: "sumBall_ID",
+      width: "5%",
+    },
+	 {
       title: "Оригинал",
       dataIndex: "haveDiplomInVus",
       key: "haveDiplomInVus",
@@ -305,14 +303,24 @@ const App = () => {
         }
       },
     },
+   //  {
+   //    title: "Наименование направления",
+   //    dataIndex: "napravlenie",
+   //    key: "napravlenie",
+   //    width: "auto",
+   //    ...getColumnSearchProps("napravlenie"),
+   //  },
+   //  {
+   //    title: "Наименование профиля",
+   //    dataIndex: "profil",
+   //    key: "profil",
+   //    width: "auto",
+   //    ...getColumnSearchProps("profil"),
+   //  },
+
+
     {
-      title: "Категория приема",
-      dataIndex: "admissionCategory",
-      key: "admissionCategory",
-      width: "10%",
-    },
-    {
-      title: "Согласие на зачисление",
+      title: "Нуждаемость в общежитии",
       dataIndex: "soglasie",
       key: "soglasie",
       width: "8%",
@@ -395,9 +403,7 @@ const App = () => {
               <Radio.Button value="Бакалавриат">
                 Бакалавриат/специалитет
               </Radio.Button>
-              <Radio.Button value="Магистратура">Магистратура</Radio.Button>
-              <Radio.Button value="СПО">СПО</Radio.Button>
-              <Radio.Button value="Аспирантура">Аспирантура</Radio.Button>
+              <Radio.Button value="Магистратура">Магистратура</Radio.Button> 
             </Radio.Group>
           </div>
           <div style={{ marginLeft: 10, fontWeight: "600" }}>
@@ -420,7 +426,7 @@ const App = () => {
               showSearch
               style={{
                 margin: 10,
-                width: "auto",
+                width: "500",
               }}
               placeholder="Введите название направления"
               optionFilterProp="children"
@@ -433,18 +439,17 @@ const App = () => {
                   .localeCompare((optionB?.label ?? "").toLowerCase())
               }
               options={listDirections}
-              onChange={(value) => getProfiles(value)}
             />
           </div>
-          <div style={{ marginLeft: 10, fontWeight: "600" }}>
-            Профиль:
+			 <div style={{ marginLeft: 10, fontWeight: "600" }}>
+            Основание поступления:
             <Select
               showSearch
               style={{
                 margin: 10,
-                width: "auto",
+                width: "500",
               }}
-              placeholder="Введите название профиля"
+              placeholder="Введите название направления"
               optionFilterProp="children"
               filterOption={(input, option) =>
                 (option?.label ?? "").includes(input)
@@ -454,8 +459,7 @@ const App = () => {
                   .toLowerCase()
                   .localeCompare((optionB?.label ?? "").toLowerCase())
               }
-              options={listProfiles}
-              onChange={(value) => setProfile(value)}
+              options={listDirections}
             />
           </div>
           {/* <Outlet /> */}
