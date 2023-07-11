@@ -7,16 +7,18 @@ import {
   Button,
   Space,
   Table,
+  message,
+  Tag,
 } from "antd";
 import { useState, useEffect, useRef } from "react";
-import { Outlet, Link } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import {
   fetchAllDirections,
   fetchAllProfiles,
   fetchAllData,
-} from "./http/ordersApi";
+} from "./http/statementApi";
+import { Link } from "react-router-dom";
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
 
@@ -31,7 +33,7 @@ const data = [
     profil: "Информационные системы управления бизнес-процессами",
     prioritet: 1,
     typeIsp: "Собственные",
-    haveDiplomInVus: "Нет",
+    haveDiplomInVus: "Да",
     idEnrolle: 145290,
     snils: "169-969-534 63",
     sumBall_ID: 253,
@@ -55,32 +57,58 @@ const App = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const [loading, setLoading] = useState(false);
+  //const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     fetchAllDirections(levelTraining, formStudy)
       .then((data) => {
         setDirections(data);
       })
-      .catch();
+      .catch((err) =>
+        message.error(
+          "Извините, что-то пошло не так, мы уже занимаемся этим вопросом"
+        )
+      );
   }, []);
 
   useEffect(() => {
+    //setLoading(true);
     fetchAllData(levelTraining, formStudy, direction, profile)
       .then((data) => {
         setTablesData(data);
+        setLoading(false);
       })
-      .catch();
+      .catch((err) =>
+        message.error(
+          "Извините, что-то пошло не так, мы уже занимаемся этим вопросом"
+        )
+      );
   }, [formStudy, levelTraining, direction, profile]);
 
   const getProfiles = (value) => {
-    setDirection(value);
-    fetchAllProfiles(levelTraining, formStudy, direction)
-      .then((data) => {
-        setProfile(data);
-      })
-      .catch();
+    //  setDirection(value);
+    //  fetchAllProfiles(levelTraining, formStudy, direction)
+    //    .then((data) => {
+    //      setProfiles(data);
+    //    })
+    // 	.catch((err) =>
+    // 	message.error(
+    // 	  "Извините, что-то пошло не так, мы уже занимаемся этим вопросом"
+    // 	)
+    //  );
   };
 
+  //   const getEnrolleStatements = (snils) => {
+  // 	fetchAllDataForEnrolle(snils)
+  // 	.then((data) => {
+
+  // 	 })
+  // 	 .catch((err) =>
+  // 	 message.error(
+  // 		"Извините, что-то пошло не так, мы уже занимаемся этим вопросом"
+  // 	 ))
+  //   }
   let listProfiles = [];
   let listDirections = [];
 
@@ -230,6 +258,15 @@ const App = () => {
       key: "snils",
       width: "10%",
       ...getColumnSearchProps("snils"),
+      render: (text) => (
+        <Link
+          to={`/abiturient/${
+            text.includes(" ") ? text.replaceAll(" ", "_") : text
+          }`}
+        >
+          {text}
+        </Link>
+      ),
     },
 
     {
@@ -256,6 +293,17 @@ const App = () => {
       dataIndex: "haveDiplomInVus",
       key: "haveDiplomInVus",
       width: "5%",
+      render: (text) => {
+        if (text === "Да") {
+          return (
+            <Tag color="#4CBB17" key={text}>
+              {text}
+            </Tag>
+          );
+        } else {
+          return text;
+        }
+      },
     },
     {
       title: "Категория приема",
@@ -295,14 +343,6 @@ const App = () => {
   //     "Технологии разработки программного обеспечения",
   //   ];
 
-  //  getDirections = () => {
-  // 	//AllDirections
-  //   }
-
-  //   getAllData = () => {
-  // 	//AllDirections
-  //   }
-
   return (
     <Layout className="layout">
       <Header
@@ -318,9 +358,9 @@ const App = () => {
         </div>
 
         <Search
-          placeholder="ID или СНИЛС"
+          placeholder="СНИЛС"
           allowClear
-          enterButton="Поиск"
+          enterButton="Найти"
           size="middle"
           style={{ width: "auto" }}
           onSearch={() => {}}
@@ -422,9 +462,9 @@ const App = () => {
           <>
             <Table
               columns={columns}
-              dataSource={tablesData}
+              dataSource={data}
               bordered
-              //loading
+              loading={loading}
               size="small"
               scroll={{
                 x: 1200,

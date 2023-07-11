@@ -29,12 +29,13 @@ const router = createBrowserRouter([
         path: "/program/:name/learn_profile/:nameProf",
         element: <AbiturList />,
       },
-		{
-			path: "/abiturient/:snils",
-			element: <UserPage/>
-		 },
+
     ],
   },
+  {
+	path: "/abiturient/:snils",
+	element: <UserPage/>
+ },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
