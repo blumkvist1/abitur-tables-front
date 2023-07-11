@@ -1,37 +1,35 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table} from "antd";
+import { Button, Input, Space, Table } from "antd";
 import { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 const data = [
-	{
-	  key: "1",
-	  snils: "165-938-468 00",
-	  name: "20.03.01 Техносферная безопасность",
-	  profile: "Информационные системы управления бизнес-процессами",
-	},
-	{
-	  key: "2",
-	  snils: "157-436-346 83",
-	  age: 42,
-	  profile: "Технологии разработки программного обеспечения",
-	  name: "20.03.01 Техносферная безопасность",
+  {
+    key: "1",
+    snils: "165-938-468 00",
+    name: "20.03.01 Техносферная безопасность",
+    profile: "Информационные системы управления бизнес-процессами",
+  },
+  {
+    key: "2",
+    snils: "157-436-346 83",
+    age: 42,
+    profile: "Технологии разработки программного обеспечения",
+    name: "20.03.01 Техносферная безопасность",
 
-	  address: "London No. 1 Lake Park",
-	},
-	{
-	  key: "3",
-	  snils: "160-687-671 93",
-	  age: 32,
-	  address: "Sydney No. 1 Lake Park",
-	  name: "15.03.06 Мехатроника и робототехника",
-	  profile: "Технологии разработки программного обеспечения",
-
-	},
- ];
+    address: "London No. 1 Lake Park",
+  },
+  {
+    key: "3",
+    snils: "160-687-671 93",
+    age: 32,
+    address: "Sydney No. 1 Lake Park",
+    name: "15.03.06 Мехатроника и робототехника",
+    profile: "Технологии разработки программного обеспечения",
+  },
+];
 
 const AbiturList = () => {
-  let { name, nameProf } = useParams();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -153,7 +151,7 @@ const AbiturList = () => {
       rowScope: "row",
       width: "5%",
     },
-	 {
+    {
       title: "Наименование направления",
       dataIndex: "name",
       key: "name",
@@ -163,7 +161,7 @@ const AbiturList = () => {
         <Link to={`/program/${text.replaceAll(" ", "_")}`}>{text}</Link>
       ),
     },
-	 {
+    {
       title: "Наименование профиля",
       dataIndex: "profile",
       key: "profile",
@@ -208,15 +206,16 @@ const AbiturList = () => {
           dataIndex: "companyAddress",
           key: "companyAddress",
           width: "15%",
-			 filters: [
-				{
-				  text: 'Бюджетная',
-				  value: 'Joe',
-				},
-				{
-				  text: 'Внебюджетная',
-				  value: 'Jim',
-				},]
+          filters: [
+            {
+              text: "Бюджетная",
+              value: "Joe",
+            },
+            {
+              text: "Внебюджетная",
+              value: "Jim",
+            },
+          ],
         },
       ],
     },
@@ -259,7 +258,7 @@ const AbiturList = () => {
         dataSource={data}
         bordered
         size="small"
-		  style={{margin:10}}
+        style={{ margin: 10 }}
         scroll={{
           x: 1200,
           //y: 285,

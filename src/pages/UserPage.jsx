@@ -1,41 +1,36 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table} from "antd";
+import { Button, Input, Space, Table } from "antd";
 import { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { Link, useParams } from "react-router-dom";
-import {
-	Layout,
-	theme,
-
-
- } from "antd";
- const { Header, Content, Footer } = Layout;
+import { Layout, theme } from "antd";
+const { Header, Content, Footer } = Layout;
 const { Search } = Input;
 
 const data = [
-	{
-	  key: "1",
-	  name: "",
-	  age: 32,
-	  address: "New York No. 1 Lake Park",
-	},
-	{
-	  key: "2",
-	  name: "",
-	  age: 42,
-	  address: "London No. 1 Lake Park",
-	},
-	{
-	  key: "3",
-	  name: "",
-	  age: 32,
-	  address: "Sydney No. 1 Lake Park",
-	},
- ];
-const UserPage = () => {  const {
-	token: { colorBgContainer },
- } = theme.useToken();
-
+  {
+    key: "1",
+    name: "",
+    age: 32,
+    address: "New York No. 1 Lake Park",
+  },
+  {
+    key: "2",
+    name: "",
+    age: 42,
+    address: "London No. 1 Lake Park",
+  },
+  {
+    key: "3",
+    name: "",
+    age: 32,
+    address: "Sydney No. 1 Lake Park",
+  },
+];
+const UserPage = () => {
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
 
   let { snils } = useParams();
   const [searchText, setSearchText] = useState("");
@@ -255,72 +250,74 @@ const UserPage = () => {  const {
     //  },
   ];
   return (
-	<Layout className="layout">
-	<Header
-	  theme="light"
-	  style={{
-		 display: "flex",
-		 alignItems: "center",
-		 justifyContent: "space-between",
-	  }}
-	>
-	  <div className="demo-logo" style={{ color: "white" }}>
-		 КГЭУ
-	  </div>
+    <Layout className="layout">
+      <Header
+        theme="light"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div className="demo-logo" style={{ color: "white" }}>
+          КГЭУ
+        </div>
 
-	  <Search
-		 placeholder="СНИЛС"
-		 allowClear
-		 enterButton="Найти"
-		 size="middle"
-		 style={{ width: "auto" }}
-		 onSearch={() => {}}
-	  />
-	</Header>
-	<Content
-	  style={{
-		 padding: "0 50px",
-		 marginTop: 16,
-		 paddingTop: "10px",
-		 minHeight: "630px",
-	  }}
-	>
-	  <div
-		 className="site-layout-content"
-		 style={{
-			background: colorBgContainer,
-		 }}
-	  >
-		 <h1 style={{ marginLeft: 10, marginTop: 10, fontSize: 30 }}>
-			Cводка заявлений абитуриента {snils} в 2023 году
-		 </h1>
-		 
-		 
-		
-		 <>
-			<Table
-			  columns={columns}
-			  dataSource={data}
-			  bordered
-			  loading={loading}
-			  size="small"
-			  scroll={{
-				 x: 1200,
-				 //y: 285,
-			  }}
-			  style={{ margin: 10 }}
-			/>
-		 </>
-	  </div>
-	</Content>
-	<Footer
-	  style={{
-		 textAlign: "center",
-	  }}
-	>
-	  ©2023 Created by KGEU
-	</Footer>
- </Layout>
+        <Search
+          placeholder="СНИЛС"
+          allowClear
+          enterButton="Найти"
+          size="middle"
+          style={{ width: "auto" }}
+          onSearch={() => {}}
+        />
+      </Header>
+      <Content
+        style={{
+          padding: "0 50px",
+          marginTop: 16,
+          paddingTop: "10px",
+          minHeight: "630px",
+        }}
+      >
+        <div
+          className="site-layout-content"
+          style={{
+            background: colorBgContainer,
+          }}
+        >
+          <h1 style={{ marginLeft: 10, marginTop: 10, fontSize: 30 }}>
+            Cводка заявлений абитуриента{" "}
+            <Link to="" style={{ color: "blue", fontSize: 30 }}>
+              {snils}
+            </Link>{" "}
+            в 2023 году
+          </h1>
+
+          <>
+            <Table
+              columns={columns}
+              dataSource={data}
+              bordered
+              loading={loading}
+              size="small"
+              scroll={{
+                x: 1200,
+                //y: 285,
+              }}
+              style={{ margin: 10 }}
+            />
+          </>
+        </div>
+      </Content>
+      <Footer
+        style={{
+          textAlign: "center",
+        }}
+      >
+        ©2023 Created by KGEU
+      </Footer>
+    </Layout>
   );
 };
 export default UserPage;
