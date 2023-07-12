@@ -24,7 +24,7 @@ export const fetchAllData = async (
 };
 
 export const fetchAllDataForEnrolle = async (snils) => {
-  const { data } = await $host.post(`AllDirections/`, {
+  const { data } = await $host.post(`AllDataForEnrolle/`, {
     Snils: snils,
   });
   return data;
