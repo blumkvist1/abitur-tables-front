@@ -1,41 +1,64 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table } from "antd";
-import { useRef, useState } from "react";
+import { Button, Input, Space, Table, message } from "antd";
+import { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
-import { Link, useParams } from "react-router-dom";
-import { Layout, theme } from "antd";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { Layout, theme, Tag } from "antd";
+import { fetchAllDataForEnrolle, fetchEnrolle } from "../http/statementApi";
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
 
-const data = [
-  {
-    key: "1",
-    name: "",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-  },
-];
 const UserPage = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const navigate = useNavigate();
 
   let { snils } = useParams();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
+  const [tablesData, setTablesData] = useState([]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchAllDataForEnrolle(
+      snils?.includes("_") ? snils.replaceAll("_", " ") : snils
+    )
+      .then((data) => {
+        setTablesData(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  }, []);
+
+  const searchEnrolle = (value) => {
+    setIsLoadingSearch(true);
+    fetchEnrolle(value)
+      .then((data) => {
+        if (data === true) {
+          setIsLoadingSearch(false);
+          navigate(
+            `/abiturient/${
+              value.lenght !== 0
+                ? value.includes(" ")
+                  ? value.replaceAll(" ", "_")
+                  : value
+                : value
+            }`
+          );
+        } else {
+          setIsLoadingSearch(false);
+          message.error(`Пользователь со СНИЛСом ${value} не найден`);
+        }
+      })
+      .catch((err) => {
+        setIsLoadingSearch(false);
+      });
+  };
 
   const searchInput = useRef(null);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -158,96 +181,111 @@ const UserPage = () => {
     },
     {
       title: "СНИЛС",
-      dataIndex: "name",
-      key: "name",
-      width: "20%",
-      ...getColumnSearchProps("name"),
-      render: (text) => <Link to={`direction/${text}`}>{text}</Link>,
+      dataIndex: "snils",
+      key: "snils",
+      width: "10%",
+      //...getColumnSearchProps("snils"),
+      render: (text) => {
+        if (text !== null && text !== undefined) {
+          if (text.length !== 0) {
+            return (
+              <Link
+                to={`/abiturient/${
+                  text.includes(" ") ? text.replaceAll(" ", "_") : text
+                }`}
+              >
+                {text}
+              </Link>
+            );
+          }
+        }
+      },
     },
     {
-      title: "Приоритет зачисления",
-      dataIndex: "number",
-      key: "number",
+      title: "Приоритет",
+      dataIndex: "priority",
+      key: "priority",
       width: "5%",
     },
     {
-      title: "Место в списке с учетом высшего приоритета",
-      dataIndex: "num",
-      key: "num",
+      title: "Сумма баллов с ИД",
+      dataIndex: "sumBal_ID",
+      key: "sumBal_ID",
+      width: "8%",
+    },
+    {
+      title: "Сумма баллов по предметам",
+      dataIndex: "sumBal",
+      key: "sumBal",
       width: "5%",
     },
     {
-      title: "Cумма баллов",
-      dataIndex: "sum",
-      key: "sum",
-      width: "10%",
-    },
-    {
-      title: "Институт",
-      dataIndex: "inst",
-      key: "inst",
-      width: "10%",
-    },
-    {
-      title: "Специальность",
-      dataIndex: "spec",
-      key: "spec",
-      width: "20%",
-    },
-    {
-      title: "Прием ФБ",
-      dataIndex: "ins",
-      key: "ins",
+      title: "ПМ/М",
+      dataIndex: "pred_1",
+      key: "pred_1",
       width: "5%",
     },
     {
-      title: "Дата заявления",
-      dataIndex: "date",
-      key: "date",
-      width: "10%",
-    },
-
-    {
-      title: "Форма/Основа",
-      dataIndex: "companyAddress",
-      key: "companyAddress",
-      width: "10%",
-    },
-
-    {
-      title: "Документы (оригинал?)",
-      dataIndex: "companyNam",
-      key: "companyNam",
-      width: "20%",
-    },
-
-    {
-      title: "Профиль",
-      dataIndex: "companyAddss",
-      key: "companyAddss",
-      width: "10%",
+      title: "ФИЗ/ИНФ",
+      dataIndex: "pred_2",
+      key: "pred_2",
+      width: "5%",
     },
     {
-      title: "Зачисление",
-      dataIndex: "coanyAddss",
-      key: "comnyAddss",
-      width: "10%",
+      title: "Русский язык",
+      dataIndex: "pred_3",
+      key: "pred_3",
+      width: "5%",
     },
-
-    //  {
-    //    title: "Age",
-    //    dataIndex: "age",
-    //    key: "age",
-    //    ...getColumnSearchProps("age"),
-    //  },
-    //  {
-    //    title: "Address",
-    //    dataIndex: "address",
-    //    key: "address",
-    //    ...getColumnSearchProps("address"),
-    //    sorter: (a, b) => a.address.length - b.address.length,
-    //    sortDirections: ["descend", "ascend"],
-    //  },
+    {
+      title: "Химия",
+      dataIndex: "pred_4",
+      key: "pred_4",
+      width: "5%",
+    },
+    {
+      title: "Индивидуальные достижения",
+      dataIndex: "sumBal_OnlyID",
+      key: "sumBal_OnlyID",
+      width: "5%",
+    },
+    {
+      title: "Наименование направления",
+      dataIndex: "napravlenie",
+      key: "napravlenie",
+      width: "auto",
+      //...getColumnSearchProps("napravlenie"),
+    },
+    {
+      title: "Наименование профиля",
+      dataIndex: "profil",
+      key: "profil",
+      width: "auto",
+      //...getColumnSearchProps("profil"),
+    },
+    {
+      title: "Оригинал",
+      dataIndex: "originalDiplom",
+      key: "originalDiplom",
+      width: "5%",
+      render: (text) => {
+        if (text === "Да") {
+          return (
+            <Tag color="#4CBB17" key={text}>
+              {text}
+            </Tag>
+          );
+        } else {
+          return text;
+        }
+      },
+    },
+    {
+      title: "Нуждаемость в общежитии",
+      dataIndex: "needRoom",
+      key: "needRoom",
+      width: "8%",
+    },
   ];
   return (
     <Layout className="layout">
@@ -259,9 +297,14 @@ const UserPage = () => {
           justifyContent: "space-between",
         }}
       >
-        <div className="demo-logo" style={{ color: "white" }}>
-          КГЭУ
-        </div>
+        <a href="https://kgeu.ru/" target="_blank" rel="noopener">
+          <div
+            className="demo-logo"
+            style={{ color: "white", fontWeight: "bold", fontSize: 24 }}
+          >
+            КГЭУ
+          </div>
+        </a>
 
         <Search
           placeholder="СНИЛС"
@@ -269,7 +312,10 @@ const UserPage = () => {
           enterButton="Найти"
           size="middle"
           style={{ width: "auto" }}
-          onSearch={() => {}}
+          onSearch={(value) => {
+            searchEnrolle(value.trim());
+          }}
+          loading={isLoadingSearch}
         />
       </Header>
       <Content
@@ -289,7 +335,7 @@ const UserPage = () => {
           <h1 style={{ marginLeft: 10, marginTop: 10, fontSize: 30 }}>
             Cводка заявлений абитуриента{" "}
             <Link to="" style={{ color: "blue", fontSize: 30 }}>
-              {snils}
+              {snils?.includes("_") ? snils.replaceAll("_", " ") : snils}
             </Link>{" "}
             в 2023 году
           </h1>
@@ -297,7 +343,7 @@ const UserPage = () => {
           <>
             <Table
               columns={columns}
-              dataSource={data}
+              dataSource={tablesData}
               bordered
               loading={loading}
               size="small"

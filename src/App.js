@@ -22,41 +22,6 @@ import { Link, useNavigate } from "react-router-dom";
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
 
-const data = [
-  {
-    sumBall: 243,
-    napravlenie: "Информатика и вычислительная техника",
-    levelTraining: "Бакалавриат",
-    foundationReceipts: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    naprav_Group: "09.03.01_О_Б_ОП_Информатика и вычислительная техника",
-    profil: "Информационные системы управления бизнес-процессами",
-    prioritet: 1,
-    typeIsp: "Собственные",
-    haveDiplomInVus: "Да",
-    idEnrolle: 145290,
-    snils: "169-969-534 63",
-    sumBall_ID: 253,
-    soglasie: "Нет",
-  },
-  {
-    sumBall: 243,
-    napravlenie: "Информатика и вычислительная техника",
-    levelTraining: "Бакалавриат",
-    foundationReceipts: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    naprav_Group: "09.03.01_О_Б_ОП_Информатика и вычислительная техника",
-    profil: "Информационные системы управления бизнес-процессами",
-    prioritet: 1,
-    typeIsp: "Собственные",
-    haveDiplomInVus: "Да",
-    idEnrolle: 145290,
-    snils: "169-969-534 63",
-    sumBall_ID: 253,
-    soglasie: "Нет",
-  },
-];
-
 const App = () => {
   const {
     token: { colorBgContainer },
@@ -79,9 +44,11 @@ const App = () => {
   //const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    fetchAllDirections(levelTraining, formStudy).then((data) => {
-      setDirections(data);
-    });
+    fetchAllDirections(levelTraining, formStudy)
+      .then((data) => {
+        setDirections(data);
+      })
+      .catch((err) => {});
   }, []);
 
   useEffect(() => {
@@ -109,15 +76,27 @@ const App = () => {
 
   const searchEnrolle = (value) => {
     setIsLoadingSearch(true);
-    fetchEnrolle(value).then((data) => {
-      if (data === true) {
+    fetchEnrolle(value)
+      .then((data) => {
+        if (data === true) {
+          setIsLoadingSearch(false);
+          navigate(
+            `/abiturient/${
+              value.lenght !== 0
+                ? value.includes(" ")
+                  ? value.replaceAll(" ", "_")
+                  : value
+                : value
+            }`
+          );
+        } else {
+          setIsLoadingSearch(false);
+          message.error(`Пользователь со СНИЛСом ${value} не найден`);
+        }
+      })
+      .catch((err) => {
         setIsLoadingSearch(false);
-        navigate(`/abiturient/${value}`);
-      } else {
-        setIsLoadingSearch(false);
-        message.error(`Пользователь со СНИЛСом ${value} не найден`);
-      }
-    });
+      });
   };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -246,65 +225,73 @@ const App = () => {
       width: "10%",
       ...getColumnSearchProps("snils"),
       render: (text) => {
-        if (text.length !== 0) {
-          return (
-            <Link
-              to={`/abiturient/${
-                text.includes(" ") ? text.replaceAll(" ", "_") : text
-              }`}
-            >
-              {text}
-            </Link>
-          );
+        if (text !== null && text !== undefined) {
+          if (text.length !== 0) {
+            return (
+              <Link
+                to={`/abiturient/${
+                  text.includes(" ") ? text.replaceAll(" ", "_") : text
+                }`}
+              >
+                {text}
+              </Link>
+            );
+          }
         }
       },
     },
     {
       title: "Приоритет",
-      dataIndex: "prioritet",
-      key: "prioritet",
+      dataIndex: "priority",
+      key: "priority",
       width: "5%",
     },
     {
       title: "Сумма баллов с ИД",
-      dataIndex: "sumBall_ID",
-      key: "sumBall_ID",
+      dataIndex: "sumBal_ID",
+      key: "sumBal_ID",
       width: "8%",
     },
     {
       title: "Сумма баллов по предметам",
-      dataIndex: "sumBall",
-      key: "sumBall",
+      dataIndex: "sumBal",
+      key: "sumBal",
       width: "5%",
     },
     {
       title: "ПМ/М",
-      dataIndex: "sumBall_ID",
-      key: "sumBall_ID",
+      dataIndex: "pred_1",
+      key: "pred_1",
       width: "5%",
     },
     {
       title: "ФИЗ/ИНФ",
-      dataIndex: "sumBall_ID",
-      key: "sumBall_ID",
+      dataIndex: "pred_2",
+      key: "pred_2",
       width: "5%",
     },
     {
       title: "Русский язык",
-      dataIndex: "sumBall_ID",
-      key: "sumBall_ID",
+      dataIndex: "pred_3",
+      key: "pred_3",
+      width: "5%",
+    },
+    {
+      title: "Химия",
+      dataIndex: "pred_4",
+      key: "pred_4",
       width: "5%",
     },
     {
       title: "Индивидуальные достижения",
-      dataIndex: "sumBall_ID",
-      key: "sumBall_ID",
+      dataIndex: "sumBal_OnlyID",
+      key: "sumBal_OnlyID",
       width: "5%",
     },
     {
       title: "Оригинал",
-      dataIndex: "haveDiplomInVus",
-      key: "haveDiplomInVus",
+      dataIndex: "originalDiplom",
+      key: "originalDiplom",
       width: "5%",
       render: (text) => {
         if (text === "Да") {
@@ -318,24 +305,10 @@ const App = () => {
         }
       },
     },
-    //  {
-    //    title: "Наименование направления",
-    //    dataIndex: "napravlenie",
-    //    key: "napravlenie",
-    //    width: "auto",
-    //    ...getColumnSearchProps("napravlenie"),
-    //  },
-    //  {
-    //    title: "Наименование профиля",
-    //    dataIndex: "profil",
-    //    key: "profil",
-    //    width: "auto",
-    //    ...getColumnSearchProps("profil"),
-    //  },
     {
       title: "Нуждаемость в общежитии",
-      dataIndex: "soglasie",
-      key: "soglasie",
+      dataIndex: "needRoom",
+      key: "needRoom",
       width: "8%",
     },
   ];
@@ -374,9 +347,14 @@ const App = () => {
           justifyContent: "space-between",
         }}
       >
-        <div className="demo-logo" style={{ color: "white" }}>
-          КГЭУ
-        </div>
+        <a href="https://kgeu.ru/" target="_blank" rel="noopener">
+          <div
+            className="demo-logo"
+            style={{ color: "white", fontWeight: "bold", fontSize: 24 }}
+          >
+            КГЭУ
+          </div>
+        </a>
 
         <Search
           placeholder="СНИЛС"
@@ -442,7 +420,7 @@ const App = () => {
               showSearch
               style={{
                 margin: 10,
-                width: "500",
+                width: "600",
               }}
               placeholder="Введите название направления"
               optionFilterProp="children"
@@ -464,9 +442,9 @@ const App = () => {
               showSearch
               style={{
                 margin: 10,
-                width: "500",
+                width: "600",
               }}
-              placeholder="Введите название направления"
+              placeholder="Выберите основание поступления"
               optionFilterProp="children"
               filterOption={(input, option) =>
                 (option?.label ?? "").includes(input)
@@ -496,6 +474,7 @@ const App = () => {
               dataSource={tablesData}
               bordered
               loading={loading}
+              pagination={false}
               size="small"
               scroll={{
                 x: 1200,
