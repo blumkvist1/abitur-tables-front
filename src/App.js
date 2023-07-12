@@ -22,431 +22,6 @@ import { Link, useNavigate } from "react-router-dom";
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
 
-const data = [
-  {
-    key: 1,
-    snils: "в00002382",
-    typeIsp: null,
-    sumBal_ID: 0,
-    sumBal: 0,
-    pred_1: null,
-    pred_2: null,
-    pred_3: null,
-    pred_4: null,
-    sumBal_OnlyID: 0,
-    priority: 1,
-    needRoom: null,
-    receptionFeatures: "Отдельная квота",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Заочная",
-    napravlenie: "Электроэнергетика и электротехника",
-    profil: "Электроэнергетические системы и сети",
-    originalDiplom: null,
-  },
-  {
-    key: 2,
-    snils: "120-139-045 95",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 250,
-    sumBal: 240,
-    pred_1: 80,
-    pred_2: 64,
-    pred_3: 96,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 3,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Мехатроника и робототехника",
-    profil: "Мехатроника",
-    originalDiplom: "?",
-  },
-  {
-    key: 3,
-    snils: "120-139-045 95",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 250,
-    sumBal: 240,
-    pred_1: 80,
-    pred_2: 64,
-    pred_3: 96,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 1,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Информатика и вычислительная техника",
-    profil: "Технологии разработки информационных систем и web-приложений",
-    originalDiplom: "?",
-  },
-  {
-    key: 4,
-    snils: "120-139-045 95",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 250,
-    sumBal: 240,
-    pred_1: null,
-    pred_2: 80,
-    pred_3: 64,
-    pred_4: 96,
-    sumBal_OnlyID: 10,
-    priority: 2,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Прикладная математика",
-    profil:
-      "Математическое и программное обеспечение систем искусственного интеллекта",
-    originalDiplom: "?",
-  },
-  {
-    key: 5,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 4,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Автоматизация технологических процессов и производств",
-    profil: "Цифровые технологии машиностроения",
-    originalDiplom: "?",
-  },
-  {
-    key: 6,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 2,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Мехатроника и робототехника",
-    profil: "Мехатроника",
-    originalDiplom: "?",
-  },
-  {
-    key: 7,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 3,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Электроника и наноэлектроника",
-    profil: "Материалы и технологии электроники",
-    originalDiplom: "?",
-  },
-  {
-    key: 8,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 1,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Электроэнергетика и электротехника",
-    profil: "Электромобильный беспилотный транспорт",
-    originalDiplom: "?",
-  },
-  {
-    key: 9,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 5,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Атомные станции: проектирование, эксплуатация и инжиниринг",
-    profil: "Проектирование и эксплуатация атомных станций",
-    originalDiplom: "?",
-  },
-  {
-    key: 10,
-    snils: "166-074-063 64",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 237,
-    sumBal: 237,
-    pred_1: 76,
-    pred_2: 88,
-    pred_3: 73,
-    pred_4: null,
-    sumBal_OnlyID: 0,
-    priority: 1,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Информатика и вычислительная техника",
-    profil: "Технологии разработки программного обеспечения",
-    originalDiplom: null,
-  },
-  {
-    key: 1,
-    snils: "в00002382",
-    typeIsp: null,
-    sumBal_ID: 0,
-    sumBal: 0,
-    pred_1: null,
-    pred_2: null,
-    pred_3: null,
-    pred_4: null,
-    sumBal_OnlyID: 0,
-    priority: 1,
-    needRoom: null,
-    receptionFeatures: "Отдельная квота",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Заочная",
-    napravlenie: "Электроэнергетика и электротехника",
-    profil: "Электроэнергетические системы и сети",
-    originalDiplom: null,
-  },
-  {
-    key: 2,
-    snils: "120-139-045 95",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 250,
-    sumBal: 240,
-    pred_1: 80,
-    pred_2: 64,
-    pred_3: 96,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 3,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Мехатроника и робототехника",
-    profil: "Мехатроника",
-    originalDiplom: "?",
-  },
-  {
-    key: 3,
-    snils: "120-139-045 95",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 250,
-    sumBal: 240,
-    pred_1: 80,
-    pred_2: 64,
-    pred_3: 96,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 1,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Информатика и вычислительная техника",
-    profil: "Технологии разработки информационных систем и web-приложений",
-    originalDiplom: "?",
-  },
-  {
-    key: 4,
-    snils: "120-139-045 95",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 250,
-    sumBal: 240,
-    pred_1: null,
-    pred_2: 80,
-    pred_3: 64,
-    pred_4: 96,
-    sumBal_OnlyID: 10,
-    priority: 2,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Прикладная математика",
-    profil:
-      "Математическое и программное обеспечение систем искусственного интеллекта",
-    originalDiplom: "?",
-  },
-  {
-    key: 5,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 4,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Автоматизация технологических процессов и производств",
-    profil: "Цифровые технологии машиностроения",
-    originalDiplom: "?",
-  },
-  {
-    key: 6,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 2,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Мехатроника и робототехника",
-    profil: "Мехатроника",
-    originalDiplom: "?",
-  },
-  {
-    key: 7,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 3,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Электроника и наноэлектроника",
-    profil: "Материалы и технологии электроники",
-    originalDiplom: "?",
-  },
-  {
-    key: 8,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 1,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Электроэнергетика и электротехника",
-    profil: "Электромобильный беспилотный транспорт",
-    originalDiplom: "?",
-  },
-  {
-    key: 9,
-    snils: "189-637-819 48",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 241,
-    sumBal: 231,
-    pred_1: 76,
-    pred_2: 74,
-    pred_3: 81,
-    pred_4: null,
-    sumBal_OnlyID: 10,
-    priority: 5,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Атомные станции: проектирование, эксплуатация и инжиниринг",
-    profil: "Проектирование и эксплуатация атомных станций",
-    originalDiplom: "?",
-  },
-  {
-    key: 10,
-    snils: "166-074-063 64",
-    typeIsp: "ЕГЭ",
-    sumBal_ID: 237,
-    sumBal: 237,
-    pred_1: 76,
-    pred_2: 88,
-    pred_3: 73,
-    pred_4: null,
-    sumBal_OnlyID: 0,
-    priority: 1,
-    needRoom: "?",
-    receptionFeatures: "Общие места",
-    reasonForAdmission: "Бюджетная основа",
-    admissionCategory: "Имеющие особое право",
-    formStudy: "Очная",
-    napravlenie: "Информатика и вычислительная техника",
-    profil: "Технологии разработки программного обеспечения",
-    originalDiplom: null,
-  },
-];
-
 const App = () => {
   const {
     token: { colorBgContainer },
@@ -456,8 +31,8 @@ const App = () => {
   const [directions, setDirections] = useState([]);
   const [tablesData, setTablesData] = useState([]);
 
-  const [formStudy, setFormStudy] = useState("Бакалавриат");
-  const [levelTraining, setLevelTraining] = useState("Очная");
+  const [formStudy, setFormStudy] = useState("Очная");
+  const [levelTraining, setLevelTraining] = useState("Бакалавриат");
   const [direction, setDirection] = useState(null);
   const [reasonAdmission, setReasonAdmission] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -465,8 +40,6 @@ const App = () => {
   const searchInput = useRef(null);
   const [loading, setLoading] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
-
-  //const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     fetchAllDirections(levelTraining, formStudy)
@@ -676,7 +249,7 @@ const App = () => {
       title: "Сумма баллов с ИД",
       dataIndex: "sumBal_ID",
       key: "sumBal_ID",
-      width: "8%",
+      width: "4%",
     },
     {
       title: "Сумма баллов по предметам",
@@ -685,29 +258,115 @@ const App = () => {
       width: "5%",
     },
     {
-      title: "ПМ/М",
+      title: "Русский язык",
+      dataIndex: "pred_1",
+      key: "pred_1",
+      width: "4%",
+    },
+    {
+      title:
+        "Информатика/Физика/Общая энергетика/Прикладная информатика/Эконом теория/Химия/Биология",
+      dataIndex: "pred_2",
+      key: "pred_2",
+      width: "4%",
+      ellipsis: {
+        showTitle: false,
+      },
+    },
+    {
+      title: "Математика/ ПМ",
+      dataIndex: "pred_3",
+      key: "pred_3",
+      width: "4%",
+      // ellipsis: {
+      // 	showTitle: false,
+      //  },
+    },
+    {
+      title: "Индивидуальные достижения",
+      dataIndex: "sumBal_OnlyID",
+      key: "sumBal_OnlyID",
+      width: "5%",
+    },
+    {
+      title: "Тип вступительных испытьаний",
+      dataIndex: "typeIsp",
+      key: "typeIsp",
+      width: "8%",
+    },
+    {
+      title: "Оригинал",
+      dataIndex: "originalDiplom",
+      key: "originalDiplom",
+      width: "5%",
+      render: (text) => {
+        if (text === "Да") {
+          return (
+            <Tag color="#4CBB17" key={text}>
+              {text}
+            </Tag>
+          );
+        } else {
+          return text;
+        }
+      },
+    },
+    {
+      title: "Нуждаемость в общежитии",
+      dataIndex: "needRoom",
+      key: "needRoom",
+      width: "8%",
+    },
+  ];
+
+  const columnsMag = [
+    {
+      title: "№",
+      dataIndex: "key",
+      rowScope: "row",
+      width: "5%",
+    },
+    {
+      title: "СНИЛС",
+      dataIndex: "snils",
+      key: "snils",
+      width: "10%",
+      ...getColumnSearchProps("snils"),
+      render: (text) => {
+        if (text !== null && text !== undefined) {
+          if (text.length !== 0) {
+            return (
+              <Link
+                to={`/abiturient/${
+                  text.includes(" ") ? text.replaceAll(" ", "_") : text
+                }`}
+              >
+                {text}
+              </Link>
+            );
+          }
+        }
+      },
+    },
+    {
+      title: "Приоритет",
+      dataIndex: "priority",
+      key: "priority",
+      width: "5%",
+    },
+    {
+      title: "Сумма баллов с ИД",
+      dataIndex: "sumBal_ID",
+      key: "sumBal_ID",
+      width: "8%",
+    },
+    {
+      title: "Междисциплинарный экзамен",
       dataIndex: "pred_1",
       key: "pred_1",
       width: "5%",
     },
-    {
-      title: "ФИЗ/ИНФ",
-      dataIndex: "pred_2",
-      key: "pred_2",
-      width: "5%",
-    },
-    {
-      title: "Русский язык",
-      dataIndex: "pred_3",
-      key: "pred_3",
-      width: "5%",
-    },
-    {
-      title: "Химия",
-      dataIndex: "pred_4",
-      key: "pred_4",
-      width: "5%",
-    },
+
     {
       title: "Индивидуальные достижения",
       dataIndex: "sumBal_OnlyID",
@@ -818,7 +477,7 @@ const App = () => {
               buttonStyle="solid"
               size="middle"
               style={{ margin: 10, width: "auto" }}
-              onChange={(value) => setLevelTraining(value)}
+              onChange={(e) => setLevelTraining(e.target.value)}
             >
               <Radio.Button value="Бакалавриат">
                 Бакалавриат/специалитет
@@ -833,7 +492,7 @@ const App = () => {
               buttonStyle="solid"
               size="middle"
               style={{ margin: 10 }}
-              onChange={(value) => setFormStudy(value)}
+              onChange={(e) => setFormStudy(e.target.value)}
             >
               <Radio.Button value="Очная">Очная</Radio.Button>
               <Radio.Button value="Очно-заочная">Очно-заочная</Radio.Button>
@@ -884,7 +543,7 @@ const App = () => {
                 { value: "На общих основаниях", label: "На общих основаниях" },
                 { value: "Целевая квота", label: "Целевая квота" },
                 { value: "Отдельная квота", label: "Отдельная квота" },
-                { value: "Специальная квота", label: "Специальная квота" },
+                { value: "Ососбая квота", label: "Ососбая квота" },
                 {
                   value: "Полное возмещение затрат",
                   label: "Полное возмещение затрат",
@@ -896,7 +555,7 @@ const App = () => {
           {/* <Outlet /> */}
           <>
             <Table
-              columns={columns}
+              columns={levelTraining === "Бакалавриат" ? columns : columnsMag}
               dataSource={tablesData}
               rowKey={(record) => record.key}
               bordered
