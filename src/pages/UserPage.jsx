@@ -1,7 +1,5 @@
-import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table, message } from "antd";
-import { useRef, useState, useEffect } from "react";
-import Highlighter from "react-highlight-words";
+import { Input, Table, message, Tooltip } from "antd";
+import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Layout, theme, Tag } from "antd";
 import { fetchAllDataForEnrolle, fetchEnrolle } from "../http/statementApi";
@@ -13,10 +11,9 @@ const UserPage = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
+  const screenWidth = window.screen.width;
 
   let { snils } = useParams();
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
   const [loading, setLoading] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [tablesData, setTablesData] = useState([]);
@@ -60,131 +57,13 @@ const UserPage = () => {
       });
   };
 
-  const searchInput = useRef(null);
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
-  };
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-      close,
-    }) => (
-      <div
-        style={{
-          padding: 8,
-        }}
-        onKeyDown={(e) => e.stopPropagation()}
-      >
-        <Input
-          ref={searchInput}
-          placeholder={`Введите СНИЛС`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{
-            marginBottom: 8,
-            display: "block",
-          }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Поиск
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{
-              width: 80,
-            }}
-          >
-            Сброс
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Фильтр
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              close();
-            }}
-          >
-            Закрыть
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined
-        style={{
-          color: filtered ? "#1677ff" : undefined,
-        }}
-      />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{
-            backgroundColor: "#ffc069",
-            padding: 0,
-          }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
   const columns = [
-    {
-      title: "№",
-      dataIndex: "key",
-      rowScope: "row",
-      width: "5%",
-    },
     {
       title: "СНИЛС",
       dataIndex: "snils",
       key: "snils",
       width: "10%",
-      //...getColumnSearchProps("snils"),
+      align: "center",
       render: (text) => {
         if (text !== null && text !== undefined) {
           if (text.length !== 0) {
@@ -205,63 +84,70 @@ const UserPage = () => {
       title: "Приоритет",
       dataIndex: "priority",
       key: "priority",
-      width: "5%",
+      width: "2%",
+      align: "center",
     },
     {
       title: "Сумма баллов с ИД",
       dataIndex: "sumBal_ID",
       key: "sumBal_ID",
-      width: "8%",
+      width: "6%",
+      align: "center",
     },
     {
       title: "Сумма баллов по предметам",
       dataIndex: "sumBal",
       key: "sumBal",
       width: "5%",
-    },
-    {
-      title: "ПМ/М",
-      dataIndex: "pred_1",
-      key: "pred_1",
-      width: "5%",
-    },
-    {
-      title: "ФИЗ/ИНФ",
-      dataIndex: "pred_2",
-      key: "pred_2",
-      width: "5%",
+      align: "center",
     },
     {
       title: "Русский язык",
+      dataIndex: "pred_1",
+      key: "pred_1",
+      width: "4%",
+      align: "center",
+    },
+    {
+      title: (
+        <Tooltip title="Информатика/Физика/Общая энергетика/Прикладная информатика/Экономическая теория/Химия/Биология">
+          <span>Предмет по выбору</span>
+        </Tooltip>
+      ),
+      dataIndex: "pred_2",
+      key: "pred_2",
+      width: "4%",
+      align: "center",
+    },
+    {
+      title: "Математика/ ПМ",
       dataIndex: "pred_3",
       key: "pred_3",
-      width: "5%",
+      width: "4%",
+      align: "center",
     },
     {
-      title: "Химия",
-      dataIndex: "pred_4",
-      key: "pred_4",
-      width: "5%",
-    },
-    {
-      title: "Индивидуальные достижения",
+      title: (
+        <Tooltip title="Индивидуальные достижения">
+          <span>ИД</span>
+        </Tooltip>
+      ),
       dataIndex: "sumBal_OnlyID",
       key: "sumBal_OnlyID",
-      width: "5%",
+      width: "3%",
+      align: "center",
     },
     {
       title: "Наименование направления",
       dataIndex: "napravlenie",
       key: "napravlenie",
-      width: "auto",
-      //...getColumnSearchProps("napravlenie"),
+      width: "15%",
     },
     {
       title: "Наименование профиля",
       dataIndex: "profil",
       key: "profil",
-      width: "auto",
-      //...getColumnSearchProps("profil"),
+      width: "15%",
     },
     {
       title: "Оригинал",
@@ -289,73 +175,155 @@ const UserPage = () => {
   ];
   return (
     <Layout className="layout">
-      <Header
-        theme="light"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <a href="https://kgeu.ru/" target="_blank" rel="noopener">
-          <div
-            className="demo-logo"
-            style={{ color: "white", fontWeight: "bold", fontSize: 24 }}
-          >
-            КГЭУ
-          </div>
-        </a>
-
-        <Search
-          placeholder="СНИЛС"
-          allowClear
-          enterButton="Найти"
-          size="middle"
-          style={{ width: "auto" }}
-          onSearch={(value) => {
-            searchEnrolle(value.trim());
-          }}
-          loading={isLoadingSearch}
-        />
-      </Header>
-      <Content
-        style={{
-          padding: "0 50px",
-          marginTop: 16,
-          paddingTop: "10px",
-          minHeight: "630px",
-        }}
-      >
-        <div
-          className="site-layout-content"
+      {screenWidth < 900 ? (
+        <Header
+          theme="light"
           style={{
-            background: colorBgContainer,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: 10,
+            width: screenWidth,
           }}
         >
-          <h1 style={{ marginLeft: 10, marginTop: 10, fontSize: 30 }}>
-            Cводка заявлений абитуриента{" "}
-            <Link to="" style={{ color: "blue", fontSize: 30 }}>
-              {snils?.includes("_") ? snils.replaceAll("_", " ") : snils}
-            </Link>{" "}
-            в 2023 году
-          </h1>
-
-          <>
-            <Table
-              columns={columns}
-              dataSource={tablesData}
-              bordered
-              loading={loading}
-              size="small"
-              scroll={{
-                x: 1200,
-                //y: 285,
+          <a href="https://kgeu.ru/" target="_blank" rel="noopener">
+            <div
+              className="demo-logo"
+              style={{ color: "white", fontWeight: "bold", fontSize: 19 }}
+            >
+              КГЭУ
+            </div>
+          </a>
+          <Search
+            placeholder="СНИЛС"
+            allowClear
+            enterButton="Найти"
+            size="small"
+            style={{ width: 220 }}
+            onSearch={(value) => {
+              searchEnrolle(value);
+            }}
+            loading={isLoadingSearch}
+          />
+        </Header>
+      ) : (
+        <Header
+          theme="light"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <a href="https://kgeu.ru/" target="_blank" rel="noopener">
+            <div
+              className="demo-logo"
+              style={{ color: "white", fontWeight: "bold", fontSize: 24 }}
+            >
+              КГЭУ
+            </div>
+          </a>
+          <Search
+            placeholder="СНИЛС"
+            allowClear
+            enterButton="Найти"
+            size="middle"
+            style={{ width: "auto" }}
+            onSearch={(value) => {
+              searchEnrolle(value);
+            }}
+            loading={isLoadingSearch}
+          />
+        </Header>
+      )}
+      {screenWidth < 900 ? (
+        <Content
+          style={{
+            padding: "0 5px 0 5px",
+            marginTop: 10,
+            minHeight: "630px",
+          }}
+        >
+          <div
+            className="site-layout-content"
+            style={{
+              background: colorBgContainer,
+            }}
+          >
+            <h1
+              style={{
+                marginLeft: 10,
+                marginTop: 10,
+                marginRight: 10,
+                fontSize: 25,
               }}
-              style={{ margin: 10 }}
-            />
-          </>
-        </div>
-      </Content>
+            >
+              Cводка заявлений абитуриента{" "}
+              <Link to="" style={{ color: "#1677ff", fontSize: 25 }}>
+                {snils?.includes("_") ? snils.replaceAll("_", " ") : snils}
+              </Link>{" "}
+              в 2023 году
+            </h1>
+            <>
+              <Table
+                columns={columns}
+                dataSource={tablesData}
+                rowKey={(record) => record.key}
+                bordered
+                loading={loading}
+                pagination={false}
+                size="small"
+                scroll={{
+                  x: 1200,
+                  //y: 285,
+                }}
+                style={{ margin: 10 }}
+              />
+            </>
+          </div>
+        </Content>
+      ) : (
+        <Content
+          style={{
+            padding: "0 50px",
+            marginTop: 16,
+            paddingTop: "10px",
+            minHeight: "630px",
+          }}
+        >
+          <div
+            className="site-layout-content"
+            style={{
+              background: colorBgContainer,
+            }}
+          >
+            <h1 style={{ marginLeft: 10, marginTop: 10, fontSize: 30 }}>
+              Cводка заявлений абитуриента{" "}
+              <Link to="" style={{ color: "#1677ff", fontSize: 30 }}>
+                {snils?.includes("_") ? snils.replaceAll("_", " ") : snils}
+              </Link>{" "}
+              в 2023 году
+            </h1>
+
+            <>
+              <Table
+                columns={columns}
+                dataSource={tablesData}
+                bordered
+                loading={loading}
+                pagination={false}
+                size="small"
+                scroll={{
+                  x: 1200,
+                  //y: 285,
+                }}
+                style={{ margin: 10 }}
+              />
+            </>
+          </div>
+        </Content>
+      )}
+
       <Footer
         style={{
           textAlign: "center",

@@ -12,13 +12,15 @@ export const fetchAllData = async (
   levelTraining,
   formStudy,
   direction,
-  reasonAdmission
+  reasonAdmission,
+  onlyOriginal
 ) => {
   const { data } = await $host.post(`AllData/`, {
     LevelTraining: levelTraining,
     FormStudy: formStudy,
     Napravlenie: direction,
     ReasonForAdmission: reasonAdmission,
+    OnlyOriginal: onlyOriginal,
   });
   return data;
 };
