@@ -13,12 +13,17 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import {
-  fetchAllDirections,
-  fetchAllData,
-  fetchEnrolle,
-} from "./http/statementApi";
+import { fetchAllData, fetchEnrolle } from "./http/statementApi";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  bakalavrOchnaya,
+  bakalavrOchnoZaochnaya,
+  bakalavrZaochnaya,
+  magistrOchnaya,
+  magistrOchnoZaochnaya,
+  magistrZaochnaya,
+  data,
+} from "./data";
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
 
@@ -28,27 +33,52 @@ const App = () => {
   } = theme.useToken();
   const navigate = useNavigate();
 
+  let listDirections = [];
+
   const [directions, setDirections] = useState([]);
   const [tablesData, setTablesData] = useState([]);
 
   const [formStudy, setFormStudy] = useState("Очная");
   const [levelTraining, setLevelTraining] = useState("Бакалавриат");
   const [direction, setDirection] = useState(null);
-  const [reasonAdmission, setReasonAdmission] = useState(null);
+  const [reasonAdmission, setReasonAdmission] = useState("На общих основаниях");
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
   const [loading, setLoading] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
 
+  const createListDirections = (directions) => {
+    listDirections = directions?.map((dir) => ({
+      key: dir,
+      value: dir,
+      label: dir,
+    }));
+  };
+
   useEffect(() => {
-    fetchAllDirections(levelTraining, formStudy)
-      .then((data) => {
-        setDirection(null);
-        setDirections(data);
-      })
-      .catch((err) => {});
-  }, [levelTraining, formStudy]);
+    setDirections(null);
+    if (levelTraining === "Бакалавриат") {
+      if (formStudy === "Очная") {
+        setDirections(bakalavrOchnaya);
+      } else if (formStudy === "Очно-заочная") {
+        setDirections(bakalavrOchnoZaochnaya);
+      } else {
+        setDirections(bakalavrZaochnaya);
+      }
+    } else {
+      if (formStudy === "Очная") {
+        setDirections(magistrOchnaya);
+      } else if (formStudy === "Очно-заочная") {
+        setDirections(magistrOchnoZaochnaya);
+      } else {
+        setDirections(magistrZaochnaya);
+      }
+    }
+    setDirection(listDirections[0]?.value);
+  }, [levelTraining, formStudy, directions]);
+
+  createListDirections(directions);
 
   useEffect(() => {
     setLoading(true);
@@ -61,17 +91,6 @@ const App = () => {
         setLoading(false);
       });
   }, [formStudy, levelTraining, direction, reasonAdmission]);
-
-  let listDirections = [];
-
-  const createListDirections = (directions) => {
-    listDirections = directions?.map((dir) => ({
-      key: dir,
-      value: dir,
-      label: dir,
-    }));
-  };
-  createListDirections(directions);
 
   const searchEnrolle = (value) => {
     setIsLoadingSearch(true);
@@ -299,17 +318,24 @@ const App = () => {
       dataIndex: "originalDiplom",
       key: "originalDiplom",
       width: "5%",
+      filters: [
+        {
+          text: "Только с оригиналом",
+          value: "Да",
+        },
+      ],
       render: (text) => {
         if (text === "Да") {
           return (
             <Tag color="#4CBB17" key={text}>
-              {text}
+              {text.toUpperCase()}
             </Tag>
           );
         } else {
           return text;
         }
       },
+      onFilter: (value, record) => record.originalDiplom?.indexOf(value) === 0,
     },
     {
       title: "Нуждаемость в общежитии",
@@ -378,17 +404,24 @@ const App = () => {
       dataIndex: "originalDiplom",
       key: "originalDiplom",
       width: "5%",
+      filters: [
+        {
+          text: "Только с оригиналом",
+          value: "Да",
+        },
+      ],
       render: (text) => {
         if (text === "Да") {
           return (
             <Tag color="#4CBB17" key={text}>
-              {text}
+              {text.toUpperCase()}
             </Tag>
           );
         } else {
           return text;
         }
       },
+      onFilter: (value, record) => record.originalDiplom?.indexOf(value) === 0,
     },
     {
       title: "Нуждаемость в общежитии",
@@ -397,24 +430,6 @@ const App = () => {
       width: "8%",
     },
   ];
-
-  //  const directions = [
-  //    "Автоматизация технологических процессов и производств",
-  //    "Водные биоресурсы и аквакультура",
-  //    "Информатика и вычислительная техника",
-  //    "Менеджмент",
-  //    "Мехатроника и робототехника",
-  //    "Прикладная информатика",
-  //    "Прикладная математика",
-  //    "Реклама и связи с общественностью",
-  //    "Социология",
-  //    "Теплоэнергетика и теплотехника",
-  //    "Техносферная безопасность",
-  //    "Экономика",
-  //    "Электроника и наноэлектроника",
-  //    "Электроэнергетика и электротехника",
-  //    "Энергетическое машиностроение",
-  //  ];
 
   //   const profiles = [
   //     "Информационные системы управления бизнес-процессами",
@@ -503,9 +518,11 @@ const App = () => {
             Направление:
             <Select
               showSearch
+              value={direction}
+              defaultValue={direction}
               style={{
                 margin: 10,
-                width: "600",
+                width: 500,
               }}
               placeholder="Введите название направления"
               optionFilterProp="children"
@@ -527,8 +544,9 @@ const App = () => {
               showSearch
               style={{
                 margin: 10,
-                width: "600",
+                width: 428,
               }}
+              defaultValue={reasonAdmission}
               placeholder="Выберите основание поступления"
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -559,7 +577,14 @@ const App = () => {
               dataSource={tablesData}
               rowKey={(record) => record.key}
               bordered
-              //pagination={false}
+              title={() => (
+                <div>
+                  <p>{levelTraining} </p>
+                  <p>{formStudy}</p>
+                  <p>{direction}</p>
+                  <p>{reasonAdmission}</p>
+                </div>
+              )}
               loading={loading}
               size="small"
               scroll={{
