@@ -229,7 +229,7 @@ const App = () => {
       title: "СНИЛС",
       dataIndex: "snils",
       key: "snils",
-      width: "8%",
+      width: "9%",
       align: "center",
       ...getColumnSearchProps("snils"),
       render: (text) => {
@@ -345,6 +345,13 @@ const App = () => {
       dataIndex: "needRoom",
       key: "needRoom",
       width: "8%",
+      align: "center",
+    },
+	 {
+      title: "Состояние",
+      dataIndex: "state",
+      key: "state",
+      width: "5%",
       align: "center",
     },
   ];
@@ -565,9 +572,9 @@ const App = () => {
             <div style={{ marginLeft: 10, fontWeight: "600" }}>
               Направление:
               <Select
-                showSearch
-                value={direction}
-                defaultValue={direction}
+                //showSearch
+               //  value={direction}
+               //  defaultValue={direction}
                 style={{
                   margin: 10,
                   marginLeft: 0,
@@ -587,10 +594,10 @@ const App = () => {
                 onChange={(value) => setDirection(value)}
               />
             </div>
-            <div style={{ marginLeft: 10, fontWeight: "600" }}>
+            <div style={{  marginLeft: 10, fontWeight: "600" }}>
               Основание поступления:
               <Select
-                showSearch
+                //showSearch
                 style={{
                   margin: 10,
                   marginLeft: 0,
@@ -623,17 +630,7 @@ const App = () => {
                 onChange={(value) => setReasonAdmission(value)}
               />
             </div>
-            <>
-              <Table
-                columns={levelTraining === "Бакалавриат" ? columns : columnsMag}
-                dataSource={tablesData}
-                rowKey={(record) => record.key}
-                bordered
-                title={() => (
-                  <div style={{ width: screenWidth - 40 }}>
-                    <p>{direction}</p>
-                    <p>{reasonAdmission}</p>
-
+				<div style={{  marginLeft: 10, width: screenWidth - 40 }}>
                     <div>
                       <Checkbox
                         style={{
@@ -646,7 +643,12 @@ const App = () => {
                       </Checkbox>
                     </div>
                   </div>
-                )}
+            <>
+              <Table
+                columns={levelTraining === "Бакалавриат" ? columns : columnsMag}
+                dataSource={tablesData}
+                rowKey={(record) => record.key}
+                bordered
                 loading={loading}
                 pagination={{ pageSize: 25 }}
                 size="small"
@@ -710,8 +712,8 @@ const App = () => {
               Направление:
               <Select
                 showSearch
-                value={direction}
-                defaultValue={direction}
+               //  value={direction}
+               //  defaultValue={direction}
                 style={{
                   margin: 10,
                   width: 450,
@@ -733,7 +735,7 @@ const App = () => {
             <div style={{ marginLeft: 10, fontWeight: "600" }}>
               Основание поступления:
               <Select
-                showSearch
+                //showSearch
                 style={{
                   margin: 10,
                   width: 378,
@@ -765,6 +767,22 @@ const App = () => {
                 onChange={(value) => setReasonAdmission(value)}
               />
             </div>
+				<div
+                    style={{
+                      display: "flex",
+                      justifyContent: "start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
+                      <Checkbox
+                        style={{ margin: 10, fontWeight: "600" }}
+                        onChange={(e) => setOnlyOriginal(e.target.checked)}
+                      >
+                        Показать только оригинал
+                      </Checkbox>
+                    </div>
+                  </div>
             {/* <Outlet /> */}
             <>
               <Table
@@ -772,28 +790,6 @@ const App = () => {
                 dataSource={tablesData}
                 rowKey={(record) => record.key}
                 bordered
-                title={() => (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div>
-                      <p>{direction}</p>
-                      <p>{reasonAdmission}</p>
-                    </div>
-                    <div>
-                      <Checkbox
-                        style={{ marginLeft: 10, fontWeight: "600" }}
-                        onChange={(e) => setOnlyOriginal(e.target.checked)}
-                      >
-                        Показать только оригинал
-                      </Checkbox>
-                    </div>
-                  </div>
-                )}
                 loading={loading}
                 size="small"
                 scroll={{
