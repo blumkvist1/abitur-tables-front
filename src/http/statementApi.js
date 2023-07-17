@@ -38,3 +38,23 @@ export const fetchEnrolle = async (snils) => {
   });
   return data;
 };
+
+export const getKCP = async (
+  levelTraining,
+  formStudy,
+  direction,
+  reasonAdmission
+) => {
+  const { data } = await $host.post(`GetKCP/`, {
+    LevelTraining: levelTraining,
+    FormStudy: formStudy,
+    Napravlenie: direction,
+    ReasonForAdmission: reasonAdmission,
+  });
+  return data;
+};
+
+export const getUpdateDate = async () => {
+  const { data } = await $host.post(`GetUpdateDate/`);
+  return data;
+};

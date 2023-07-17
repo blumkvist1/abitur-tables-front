@@ -4,19 +4,26 @@ import "./index.css";
 import App from "./App";
 import ErrorPage from "./pages/ErrorPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import UserPage from "./pages/UserPage";
+import UserPage, { loader as enrolleLoader } from "./pages/UserPage";
+import MainPage from "./pages/MainPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-
+    children: [
+      {
+        path: "",
+        element: <MainPage />,
+      },
+      {
+        path: "/abiturient/:snils",
+        loader: enrolleLoader,
+        element: <UserPage />,
+      },
+    ],
   },
-  {
-	path: "/abiturient/:snils",
-	element: <UserPage/>
- },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
