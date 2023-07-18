@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { useState, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
-
 import { Input, Button, Space, Table, Tooltip, Tag, Checkbox } from "antd";
 import { MainContext } from "../App";
 
@@ -13,6 +12,37 @@ const MainPage = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const [tablesDataCopy, setTablesDataCopy] = useState([]);
+  const [tablesDataSorted, setTablesDataSorted] = useState([]);
+  const [sorted, setSorted] = useState(false);
+
+  useEffect(() => {
+    setTablesDataSorted([]);
+    setTablesDataCopy([]);
+    sorted ? sortByDescend() : sortByBall();
+  }, [tablesData]);
+
+  const sortByDescend = () => {
+    tablesData
+      .sort(function (a, b) {
+        return a.priority - b.priority;
+      })
+      .forEach((element, index) => {
+        element.key = index + 1;
+      });
+    setTablesDataSorted([...tablesData]);
+  };
+
+  const sortByBall = () => {
+    tablesData
+      .sort(function (a, b) {
+        return b.sumBal_ID - a.sumBal_ID;
+      })
+      .forEach((element, index) => {
+        element.key = index + 1;
+      });
+    setTablesDataCopy([...tablesData]);
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -142,7 +172,8 @@ const MainPage = () => {
       width: "2%",
       align: "center",
       showSorterTooltip: false,
-      sorter: (a, b) => a.priority - b.priority,
+      sorter: () => {},
+      sortDirections: ["descend"],
     },
     {
       title: "Сумма баллов с ИД",
@@ -207,13 +238,6 @@ const MainPage = () => {
       key: "originalDiplom",
       width: "5%",
       align: "center",
-
-      filters: [
-        {
-          text: "Только с оригиналом",
-          value: "Да",
-        },
-      ],
       render: (text) => {
         if (text === "Да") {
           return (
@@ -225,7 +249,6 @@ const MainPage = () => {
           return text;
         }
       },
-      onFilter: (value, record) => record.originalDiplom?.indexOf(value) === 0,
     },
     {
       title: "Нуждаемость в общежитии",
@@ -280,6 +303,9 @@ const MainPage = () => {
       key: "priority",
       width: "2%",
       align: "center",
+      showSorterTooltip: false,
+      sorter: () => {},
+      sortDirections: ["descend"],
     },
     {
       title: "Сумма баллов с ИД",
@@ -313,12 +339,6 @@ const MainPage = () => {
       key: "originalDiplom",
       width: "5%",
       align: "center",
-      filters: [
-        {
-          text: "Только с оригиналом",
-          value: "Да",
-        },
-      ],
       render: (text) => {
         if (text === "Да") {
           return (
@@ -330,7 +350,6 @@ const MainPage = () => {
           return text;
         }
       },
-      onFilter: (value, record) => record.originalDiplom?.indexOf(value) === 0,
     },
     {
       title: "Нуждаемость в общежитии",
@@ -340,13 +359,25 @@ const MainPage = () => {
       align: "center",
     },
   ];
+
+  const onChange = (pagination, filters, sorter, extra) => {
+    if (sorter.order === undefined) {
+      sortByBall();
+      setSorted(false);
+    } else {
+      sortByDescend();
+      setSorted(true);
+    }
+  };
+
   return (
     <>
       <Table
         columns={levelTraining === "Бакалавриат" ? columns : columnsMag}
-        dataSource={tablesData}
+        dataSource={sorted ? tablesDataSorted : tablesData}
         rowKey={(record) => record.key}
         bordered
+        onChange={onChange}
         title={() => (
           <div
             style={{
@@ -356,7 +387,6 @@ const MainPage = () => {
             }}
           >
             <div style={{ fontWeight: "600" }}>
-              {" "}
               Контрольные цифры приема: <Tag color="blue">{kcp}</Tag>
             </div>
             <div>
@@ -372,6 +402,7 @@ const MainPage = () => {
           </div>
         )}
         loading={loading}
+        pagination={{ showSizeChanger: true }}
         size="small"
         scroll={{
           x: 1200,

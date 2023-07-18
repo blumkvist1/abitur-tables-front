@@ -5,7 +5,6 @@ import {
   Radio,
   Select,
   message,
-  Checkbox,
   Tag,
   Breadcrumb,
 } from "antd";
@@ -266,8 +265,11 @@ const App = () => {
                   ]}
                 />
                 <div>
-                  <div style={{marginRight: 4, marginTop:10}}>
-                    Обновлено: <p style={{padding:0, margin:0}}><Tag color="blue">{dateUpdate}</Tag></p>
+                  <div style={{ marginRight: 4, marginTop: 10 }}>
+                    Обновлено:{" "}
+                    <p style={{ padding: 0, margin: 0 }}>
+                      <Tag color="blue">{dateUpdate}</Tag>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -294,7 +296,7 @@ const App = () => {
                   ]}
                 />
                 <div>
-                  <div style={{marginRight: 4, marginTop:10}}>
+                  <div style={{ marginRight: 4, marginTop: 10 }}>
                     Обновлено: <Tag color="blue">{dateUpdate}</Tag>
                   </div>
                 </div>
@@ -347,7 +349,13 @@ const App = () => {
                   ]}
                 />
                 <div>
-					 <div style={{ fontWeight: "600", marginRight: 50, marginTop: 10 }}>
+                  <div
+                    style={{
+                      fontWeight: "600",
+                      marginRight: 50,
+                      marginTop: 10,
+                    }}
+                  >
                     Обновлено: <Tag color="geekblue">{dateUpdate}</Tag>
                   </div>
                 </div>
@@ -375,7 +383,13 @@ const App = () => {
                   ]}
                 />
                 <div>
-                  <div style={{ fontWeight: "600", marginRight: 50, marginTop: 10 }}>
+                  <div
+                    style={{
+                      fontWeight: "600",
+                      marginRight: 50,
+                      marginTop: 10,
+                    }}
+                  >
                     Обновлено: <Tag color="geekblue">{dateUpdate}</Tag>
                   </div>
                 </div>

@@ -55,6 +55,6 @@ export const getKCP = async (
 };
 
 export const getUpdateDate = async () => {
-  const { data } = await $host.post(`GetUpdateDate/`);
+  const { data } = await $host.get(`GetUpdateDate/`);
   return data;
 };
