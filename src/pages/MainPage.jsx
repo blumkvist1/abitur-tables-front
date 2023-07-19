@@ -226,7 +226,7 @@ const MainPage = () => {
       align: "center",
     },
     {
-      title: "Тип вступительных испытьаний",
+      title: "Тип вступительных испытаний",
       dataIndex: "typeIsp",
       key: "typeIsp",
       width: "8%",
